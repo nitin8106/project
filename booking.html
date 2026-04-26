@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book a Bike - RideRental</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="booking">
+
+  <!-- NAVBAR -->
+  <nav>
+    <a href="index.html" class="logo">Ride<span>Rental</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="bikes.html">Bikes</a></li>
+      <li><a href="login.html" class="link-login">Login</a></li>
+      <li><a href="register.html" class="btn-nav link-register">Register</a></li>
+      <li><a href="#" class="user-greet" style="display:none;color:#ff6b35;font-weight:700;cursor:default"></a></li>
+      <li><a href="#" class="link-logout" style="display:none" onclick="logout()">Logout</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>Complete Your Booking</h1>
+    <p>Select duration and payment method</p>
+  </div>
+
+  <div class="booking-container">
+
+    <!-- BOOKING DETAILS -->
+    <div class="booking-card">
+      <h2>📋 Booking Details</h2>
+
+      <div class="bike-summary">
+        <img id="b-bike-img" src="" alt="Bike">
+        <div class="bike-summary-info">
+          <h4 id="b-bike-name">Loading...</h4>
+          <p id="b-bike-cat"></p>
+        </div>
+      </div>
+
+      <label style="font-weight:600;font-size:0.9rem;display:block;margin-bottom:10px;">Rental Duration Type</label>
+      <div class="duration-selector">
+        <button class="duration-btn active" data-type="hour">⏱️ Per Hour</button>
+        <button class="duration-btn" data-type="day">📅 Per Day</button>
+      </div>
+
+      <div class="form-group">
+        <label for="qty-input">Number of Hours / Days</label>
+        <input type="number" id="qty-input" value="1" min="1" max="30" style="width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;outline:none;">
+      </div>
+
+      <div class="price-breakdown">
+        <div class="price-row">
+          <span>Rental Cost</span>
+          <span id="price-rate">—</span>
+        </div>
+        <div class="price-row">
+          <span>Subtotal</span>
+          <span id="price-subtotal">—</span>
+        </div>
+        <div class="price-row">
+          <span>GST (18%)</span>
+          <span id="price-tax">—</span>
+        </div>
+        <div class="price-row total">
+          <span>Total Payable</span>
+          <span id="price-total">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT -->
+    <div class="payment-card">
+      <h2>💳 Payment Method</h2>
+
+      <div class="payment-methods">
+        <label class="payment-option selected">
+          <input type="radio" name="payment" value="card" checked>
+          <span class="pay-icon">💳</span>
+          <div>
+            <div class="pay-label">Credit / Debit Card</div>
+            <div style="font-size:0.78rem;color:#888;">Visa, Mastercard, RuPay</div>
+          </div>
+        </label>
+
+        <label class="payment-option">
+          <input type="radio" name="payment" value="upi">
+          <span class="pay-icon">📱</span>
+          <div>
+            <div class="pay-label">UPI Payment</div>
+            <div style="font-size:0.78rem;color:#888;">GPay, PhonePe, Paytm</div>
+          </div>
+        </label>
+
+        <label class="payment-option">
+          <input type="radio" name="payment" value="cash">
+          <span class="pay-icon">💵</span>
+          <div>
+            <div class="pay-label">Cash on Pickup</div>
+            <div style="font-size:0.78rem;color:#888;">Pay at the pickup location</div>
+          </div>
+        </label>
+      </div>
+
+      <!-- CARD FORM -->
+      <div class="card-form show" id="card-form">
+        <div class="form-group">
+          <label>Cardholder Name</label>
+          <input type="text" id="card-name" placeholder="Name on card">
+        </div>
+        <div class="form-group">
+          <label>Card Number</label>
+          <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19"
+            oninput="this.value=this.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim()">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Expiry Date</label>
+            <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5"
+              oninput="this.value=this.value.replace(/\D/g,'').replace(/^(\d{2})(\d)/,'$1/$2')">
+          </div>
+          <div class="form-group">
+            <label>CVV</label>
+            <input type="password" id="card-cvv" placeholder="•••" maxlength="3">
+          </div>
+        </div>
+      </div>
+
+      <!-- UPI FORM -->
+      <div id="upi-form" style="display:none">
+        <div class="form-group">
+          <label>UPI ID</label>
+          <input type="text" id="upi-id" placeholder="yourname@upi">
+        </div>
+        <div style="background:#f0f9ff;border:1px solid #bee3f8;border-radius:8px;padding:12px;font-size:0.85rem;color:#2b6cb0;margin-top:5px;">
+          📲 A payment request will be sent to your UPI app
+        </div>
+      </div>
+
+      <!-- CASH INFO -->
+      <div id="cash-info" style="display:none;background:#f0fff4;border:1px solid #9ae6b4;border-radius:8px;padding:15px;font-size:0.88rem;color:#276749;">
+        ✅ <strong>Cash on Pickup selected.</strong><br>
+        Please carry exact change to the pickup location. Your booking will be confirmed instantly.
+      </div>
+
+      <button class="btn btn-primary btn-full" style="margin-top:20px" onclick="confirmBooking()">
+        🏍️ Confirm Booking
+      </button>
+
+      <p style="text-align:center;font-size:0.8rem;color:#aaa;margin-top:12px;">
+        🔒 Secure booking. No real payment processed.
+      </p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Toggle UPI/Cash forms based on payment selection
+    document.querySelectorAll('.payment-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        const val = opt.querySelector('input').value;
+        document.getElementById('card-form').style.display = val === 'card' ? 'block' : 'none';
+        document.getElementById('upi-form').style.display = val === 'upi' ? 'block' : 'none';
+        document.getElementById('cash-info').style.display = val === 'cash' ? 'block' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
